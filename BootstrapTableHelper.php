@@ -33,6 +33,8 @@ class BootstrapTableHelper
     private $striped = true;
     private $toolbarAlign = 'left';
     private $queryParams = null;
+    private $pagination = false;
+    private $sidePagination='client';
 
     const COLUMN_ATTR_NAME = 'name';
     const COLUMN_ATTR_TITLE = 'title';
@@ -41,7 +43,6 @@ class BootstrapTableHelper
     const COLUMN_ATTR_VISIBLE = 'visible';
     const COLUMN_ATTR_SWITCHABLE = 'switchable';
     const COLUMN_ATTR_SEARCH_EXACT = 'searchExact';
-    const COLUMN_ATTR_PHP_FORMAT = 'php_format';
 
     /**
      * php function create result, take one parameter:
@@ -84,6 +85,11 @@ class BootstrapTableHelper
      * Support classes or css.
      */
     const COLUMN_ATTR_JS_CELL_STYLE = 'cell-style';
+
+    /**
+     * Format result
+     */
+    const COLUMN_ATTR_PHP_FORMAT = 'php_format';
 
     const COLUMN_FORMAT_NONE = -1;
     const COLUMN_FORMAT_DATE = 0;
@@ -539,6 +545,46 @@ class BootstrapTableHelper
     }
 
     /**
+     * True to show a pagination toolbar on table bottom.
+     * @param bool $value
+     * @return $this
+     */
+    public function setPagination($value = false)
+    {
+        $this->pagination = $value;
+        return $this;
+    }
+
+    /**
+     * Defines the side pagination of table, can only be 'client' or 'server'.
+     * @return mixed
+     */
+    public function getSidePagination()
+    {
+        return $this->sidePagination;
+    }
+
+    /**
+     * Defines the side pagination of table, can only be 'client' or 'server'.
+     * @param string $value
+     * @return $this
+     */
+    public function setSidePagination($value = 'client')
+    {
+        $this->sidePagination = $value;
+        return $this;
+    }
+
+    /**
+     * True to show a pagination toolbar on table bottom.
+     * @return mixed
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
      * Render table Html.
      * @return string
      */
@@ -560,17 +606,12 @@ class BootstrapTableHelper
                 'data-show-refresh' => $this->getShowRefresh(),
                 'data-show-toggle' => $this->getShowToggle(),
                 'data-show-columns' => $this->getShowColumns(),
-                //'data-show-pagination-switch' => true,
-                'data-pagination' => true,
-                'data-side-pagination' => 'server',
-                //'data-maintain-selected' => 'true',
+                'data-pagination' => $this->getPagination(),
+                'data-side-pagination' => $this->getSidePagination(),
                 'data-page-list' => $this->getPageList(),
                 'data-page-size' => $this->getPageSize(),
                 'data-card-view' => $this->getShowCardView(),
                 'data-toolbar-align' => $this->getToolbarAlign(),
-                //'data-show-filter' => true,
-                //'data-id-field' => 'code'
-                //'data-show-export'=>true,
             ];
 
         if ($this->getQueryParams() != null) {
