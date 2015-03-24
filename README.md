@@ -7,8 +7,8 @@ Create a table using https://github.com/wenzhixin/bootstrap-table and laravel
 In contrelle two route
 ```
 private function createTable()
+{
   $table = BootstrapTableHelper::table()
-  {
             ->setUrl($url) //set or default Request::url()
             ->setSortName('code')
             
@@ -24,8 +24,7 @@ private function createTable()
             //toolbar name
             ->setToolbar('#toolbar');
             
-            return $table
-            
+  return $table
 }
 
 protected function getData()
