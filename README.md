@@ -24,6 +24,8 @@ In contrelle two route
 private function createTable()
 {
   $table = BootstrapTableHelper::table()
+            ->setPagination(true)              //enabled pagination
+            ->setSidePagination('server')     //pagination server
             ->setUrl($url) //set or default Request::url()
             ->setSortName('code')
             
