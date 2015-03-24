@@ -4,6 +4,20 @@ Based on idea Chumper/Datatable https://github.com/Chumper/Datatable
 
 Create a table using https://github.com/wenzhixin/bootstrap-table and laravel 
 
+
+##Features
+
+This package supports:
+Easy to add and order columns
+Includes a simple helper for the HTML side
+Use your own functions and presenters in your columns
+Search in your custom defined columns
+Define your specific fields for searching and ordering
+Add custom javascript values for the table
+
+
+##Usage
+
 In contrelle two route
 ```
 private function createTable()
