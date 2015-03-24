@@ -8,6 +8,7 @@ Create a table using https://github.com/wenzhixin/bootstrap-table and laravel
 ##Features
 
 This package supports:
+One file any functionality
 Easy to add and order columns
 Includes a simple helper for the HTML side
 Use your own functions and presenters in your columns
@@ -43,7 +44,7 @@ private function createTable()
 
 protected function getData()
 {
-        return $this->createTable()->buildData(Data::select());
+  return $this->createTable()->buildData(Data::select());
 }
 ```
 
@@ -51,11 +52,11 @@ In alternative unique route BootstrapTableHelper::shouldHandle()
 ```
 protected function index()
 {
-        if (BootstrapTableHelper::shouldHandle()) {
-            return $this->getData();
-        } else {
-            return View::make('data',['table' => $this->createTable(),]);
-        }
+  if (BootstrapTableHelper::shouldHandle()) {
+    return $this->getData();
+  } else {
+    return View::make('data',['table' => $this->createTable(),]);
+  }
 }
 ```
 
