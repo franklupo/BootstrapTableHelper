@@ -790,7 +790,7 @@ data	-	Array	[]	The data to be loaded.
                 $function = function ($row, $indexOfPage, $index) use ($key) {
                     try {
                         //format value
-                        switch ($this->getColumnAttr($key,self::COLUMN_PHP_FORMAT)) {
+                        switch ($this->getColumnAttr($key, self::COLUMN_PHP_FORMAT)) {
                             case self::COLUMN_FORMAT_DATE:
                                 return $row[$key]->toDateString();
 
@@ -862,9 +862,7 @@ data	-	Array	[]	The data to be loaded.
         //sort
         $sort = Input::get('sort', '');
         if ($sort != '') {
-            if ($this->columns[$sort][self::COLUMN_SORTABLE]) {
-                $query = $query->orderBy($sort, Input::get('order', 'asc'));
-            }
+            $query = $query->orderBy($sort, Input::get('order', 'asc'));
         }
 
         //get data
