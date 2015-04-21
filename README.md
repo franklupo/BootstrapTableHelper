@@ -21,32 +21,33 @@ Add custom javascript values for the table
 
 In contrelle two route
 ```
-private function createTable()
+private function createTable($url)
 {
-  $table = BootstrapTableHelper::table()
-            ->setPagination(true)              //enabled pagination
-            ->setSidePagination('server')     //pagination server
-            ->setUrl($url) //set or default Request::url()
-            ->setSortName('code')
-            
-            //create column with function trasform
-            ->addColumn('code', 'Code', true, true,function(row)
-            {
-              return '<a href="...">' . $row['code'] .'</a>';
-            })
+ $table = BootstrapTableHelper::table()
+            ->setOptions(BootstrapTableHelper::TABLE_SEARCH, true)
+            ->setOptions(BootstrapTableHelper::TABLE_SHOW_REFRESH, true)
+            ->setOptions(BootstrapTableHelper::TABLE_SHOW_COLUMNS, true)
+            ->setOptions(BootstrapTableHelper::TABLE_SHOW_TOGGLE, true)
+            ->setOptions(BootstrapTableHelper::TABLE_PAGINATION, true)
+            ->setOptions(BootstrapTableHelper::TABLE_SIDE_PAGINATION, 'server')
+            ->setOptions(BootstrapTableHelper::TABLE_URL, $url)
+            ->setOptions(BootstrapTableHelper::TABLE_SORT_NAME, 'code')
+            ->addColumn('code', 'Code', true, true)
             ->addColumn('description', 'Memo', true, true)
             ->addColumn('quantity', 'Quantity', true, false)
-            ->addColumn('weight', 'Weight', true, false)
-            
-            //toolbar name
-            ->setToolbar('#toolbar');
+            ->addColumn('weight', 'Weight', true, false);
+        
+        //if not defined use request    
+        if ($url == '') {
+            $table->useRequestLaravel();
+        }
             
   return $table
 }
 
 protected function getData()
 {
-  return $this->createTable()->buildData(Data::select());
+  return $this->createTable('')->buildData(Data::select());
 }
 ```
 
@@ -57,7 +58,7 @@ protected function index()
   if (BootstrapTableHelper::shouldHandle()) {
     return $this->getData();
   } else {
-    return View::make('data',['table' => $this->createTable(),]);
+    return View::make('data',['table' => $this->createTable(''),]);
   }
 }
 ```
