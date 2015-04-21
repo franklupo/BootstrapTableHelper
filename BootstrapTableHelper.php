@@ -790,23 +790,23 @@ data	-	Array	[]	The data to be loaded.
                 $function = function ($row, $indexOfPage, $index) use ($key) {
                     try {
                         //format value
-                        switch ($this->format) {
-                            case DateColumn::DATE:
+                        switch ($this->getColumnAttr($key,self::COLUMN_PHP_FORMAT)) {
+                            case self::COLUMN_FORMAT_DATE:
                                 return $row[$key]->toDateString();
 
-                            case DateColumn::TIME:
+                            case self::COLUMN_FORMAT_TIME:
                                 return $row[$key]->toTimeString();
 
-                            case DateColumn::DATE_TIME:
+                            case self::COLUMN_FORMAT_DATE_TIME:
                                 return $row[$key]->toDateTimeString();
 
-                            case DateColumn::CUSTOM:
+                            case self::COLUMN_FORMAT_CUSTOM:
                                 return $row[$key]->format($this->custom);
 
-                            case DateColumn::FORMATTED_DATE:
+                            case self::COLUMN_FORMAT_DATE:
                                 return $row[$key]->toFormattedDateString();
 
-                            case DateColumn::DAY_DATE:
+                            case self::COLUMN_FORMAT_DAY_DATE:
                                 return $row[$key]->toDayDateTimeString();
                         }
                     } catch (Exception $e) {
