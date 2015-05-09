@@ -747,7 +747,11 @@ data	-	Array	[]	The data to be loaded.
     {
         $ret = '<table';
         foreach ($this->options as $key => $value) {
-            $ret .= ' ' . $key . '="' . $value . '"';
+            if (is_bool($value) === true) {
+                $ret .= ' ' . $key . '="' . ($value ? 'true' : 'false') . '"';
+            } else {
+                $ret .= ' ' . $key . '="' . $value . '"';
+            }
         }
         $ret .= '><thead><tr>';
 
@@ -755,15 +759,24 @@ data	-	Array	[]	The data to be loaded.
         foreach ($this->columns as $name => $column) {
             $ret .= '<th';
 
+            $title = '';
             foreach ($column as $key => $value) {
                 if ($key != self::COLUMN_PHP_FUNCTION &&
                     $key != self::COLUMN_PHP_FORMAT &&
-                    $key != self::COLUMN_DATA_SEARCH_EXACT
+                    $key != self::COLUMN_DATA_SEARCH_EXACT &&
+                    $key != self::COLUMN_TITLE
                 ) {
-                    $ret .= ' ' . $key . '="' . $value . '"';
+                    if (is_bool($value) === true) {
+                        $ret .= ' ' . $key . '="' . ($value ? 'true' : 'false') . '"';
+                    } else {
+                        $ret .= ' ' . $key . '="' . $value . '"';
+                    }
+
+                } else if ($key == self::COLUMN_TITLE) {
+                    $title = $value;
                 }
             }
-            $ret .= '></th>';
+            $ret .= '>' . $title . '</th>';
         }
         $ret .= '</tr></thead></table>';
 
@@ -803,7 +816,7 @@ data	-	Array	[]	The data to be loaded.
                             case self::COLUMN_FORMAT_CUSTOM:
                                 return $row[$key]->format($this->custom);
 
-                            case self::COLUMN_FORMAT_DATE:
+                            case self::COLUMN_FORMAT_FORMATTED_DATE:
                                 return $row[$key]->toFormattedDateString();
 
                             case self::COLUMN_FORMAT_DAY_DATE:
