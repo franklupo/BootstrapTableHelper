@@ -75,8 +75,8 @@ class BootstrapTableHelper
     const TABLE_ICONS = 'data-icons';
 
     /*
-    columns	-	Array	[]	The table columns config object, see column properties for more details.
-data	-	Array	[]	The data to be loaded.
+        columns	-	Array	[]	The table columns config object, see column properties for more details.
+        data	-	Array	[]	The data to be loaded.
      */
 
     /**
@@ -615,7 +615,7 @@ data	-	Array	[]	The data to be loaded.
 
         //rename column from 0 to column name
         $keys = array_keys($this->columns);
-        $keys[array_search('0', array_values($keys))] = $data[$name]['data-field'];
+        $keys[array_search('0', array_values($keys))] = $data[$name][self::COLUMN_FIELD];
         $this->columns = array_combine($keys, $this->columns);
 
         return $this;
@@ -674,7 +674,7 @@ data	-	Array	[]	The data to be loaded.
     public function setExactMatchColumns($value = [])
     {
         foreach ($value as $name) {
-            getColumn($name)[self::COLUMN_DATA_SEARCH_EXACT] = true;
+            self::getColumn($name)[self::COLUMN_DATA_SEARCH_EXACT] = true;
         }
 
         return $this;
@@ -822,9 +822,10 @@ data	-	Array	[]	The data to be loaded.
                             case self::COLUMN_FORMAT_DAY_DATE:
                                 return $row[$key]->toDayDateTimeString();
                         }
-                    } catch (Exception $e) {
+
+                    } catch (Exception $ex) {
                         //if error show error in row
-                        return $e->getMessage();
+                        return $ex->getMessage();
                     }
                 };
 
