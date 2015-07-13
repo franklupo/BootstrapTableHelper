@@ -849,6 +849,7 @@ class BootstrapTableHelper
         if ($search != '') {
             $query = $query->where(function ($query) use ($search) {
                 foreach ($this->columns as $key => $value) {
+                    //if searchable column
                     if ($value[self::COLUMN_SEARCHABLE]) {
                         $exactWordSearch = $this->getExactWordSearch();
                         if (!$exactWordSearch) {
@@ -895,34 +896,53 @@ class BootstrapTableHelper
             //parse data
 
             $index = 0;
-            $data = $data->map(function ($row) use (&$index, $offset) {
-                $entry = array();
 
-                $index++;
+            if (is_array($data)) {
+                //is query
+                $data = array_map(
+                    function ($row) use (&$index, $offset) {
+                        return $this->transformRow($row, $index, $offset);
+                    }, $data);
 
-                //transfer value in column row
-                foreach ($this->columns as $key => $value) {
-                    //check is calculated by function
-                    $function = $this->getColumnAttr($key, self::COLUMN_PHP_FUNCTION, null);
+            } else {
+                //is model
+                $data = $data->map(
+                    function ($row) use (&$index, $offset) {
+                        return $this->transformRow($row, $index, $offset);
+                    });
 
-                    if ($function == null) {
-                        $entry[$key] = $row[$key];
-
-                    } else {
-
-                        //call function
-                        try {
-                            $entry[$key] = call_user_func($function, $row, $index, $index + $offset);
-                        } catch (Exception $e) {
-                            //if error show error in row
-                            $entry[$key] = $e->getMessage();
-                        }
-                    }
-                }
-                return $entry;
-            });
+            }
         }
 
         return '{"total": ' . $count . ',"rows": ' . json_encode($data) . "}";
+    }
+
+    private function transformRow($row, $index, $offset)
+    {
+        $entry = [];
+
+        $index++;
+
+        //transfer value in column row
+        foreach ($this->columns as $key => $value) {
+            //check is calculated by function
+            $function = $this->getColumnAttr($key, self::COLUMN_PHP_FUNCTION, null);
+
+            if ($function == null) {
+                $entry[$key] = $row[$key];
+
+            } else {
+
+                //call function
+                try {
+                    $entry[$key] = call_user_func($function, $row, $index, $index + $offset);
+                } catch (Exception $e) {
+                    //if error show error in row
+                    $entry[$key] = $e->getMessage();
+                }
+            }
+        }
+
+        return $entry;
     }
 }
